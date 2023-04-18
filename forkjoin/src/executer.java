@@ -1,22 +1,30 @@
-import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class executer extends mergesort implements Callable<int[]>{
+public class executer implements Runnable {
+private int[] arrexecuter;
+private int left;
+private int right;
+private mergesort mergesort = new mergesort();
 
-    private int[] arrexecuter;
-    private int l;
-    private int r;
+public executer(int[] arrexecuter, int left, int right){
+    this.arrexecuter = arrexecuter;
+    this.left = left;
+    this.right = right;
 
-    public executer(int[]arrexecuter, int l, int r){
-        this.arrexecuter = arrexecuter;
-        this.l = l;
-        this.r = r;
+}
+
+@Override
+public void run() {
+    if (left < right) {
+        int mid = (left + right) / 2;
+        executer leftTask = new executer(arrexecuter, left, mid);
+        executer rightTask = new executer(arrexecuter, mid + 1, right);
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        executor.submit(leftTask);
+        executor.submit(rightTask);
+        mergesort.merge(arrexecuter, left, mid, right);
+        executor.shutdown();
     }
-
-    @Override
-    public int[] call() throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'call'");
-    }
-
-    
+}
 }

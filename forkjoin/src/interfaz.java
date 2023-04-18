@@ -6,7 +6,6 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.Future;
 
 import javax.swing.*;
 
@@ -126,9 +125,7 @@ public class interfaz extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 long inicio2 = System.nanoTime();
-                Future<int[]> leftResult = executor.submit(new Executor(arr, l, (l + r) / 2));
-                Future<int[]> rightResult = executor.submit(new Executor(arr, (l + r) / 2 + 1, r));
-
+                executor.execute((Runnable) new executer(arrexecuter, 0, arrexecuter.length-1));
                 long fin2 = System.nanoTime();
                 area2.setText(Arrays.toString(arrexecuter));
                 
@@ -143,12 +140,7 @@ public class interfaz extends JFrame{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                area1.setText("");
-                area2.setText("");
-                arr = null;
-                arrfork = null;
-                arrexecuter = null;
-                
+                area2.setText(""); 
             }
             
         };
